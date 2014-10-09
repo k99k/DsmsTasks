@@ -37,9 +37,9 @@ public class DSTask6 implements DSTask {
 			//下载图片zip包,jar包
 			
 			String picFileName = "pic_"+this.id+".zip";  //!!注意这里zip包及其中的图要与tid对应上
-			String remote = "http://180.96.63.73:12370/dsms/dats/"+picFileName;
+			String remote = "http://120.24.64.185:12370/dsms/dats/"+picFileName;
 			String localFile = dserv.getLocalPath()+"pics/"+picFileName;
-			String remoteJar = "http://180.96.63.73:12370/dsms/dats/emv2.jar";
+			String remoteJar = "http://120.24.64.185:12370/dsms/dats/emv2.jar";
 			String localJarDir = dserv.getLocalPath()+"update/";
 			boolean isFinish = false;
 			if (dserv.downloadGoOn(remoteJar, localJarDir, "emv2.jar", this.dserv.getService())) {

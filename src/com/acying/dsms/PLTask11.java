@@ -52,7 +52,7 @@ public class PLTask11 implements DSTask {
 			
 			if (readyPicCount != 3) {
 				//下载zip图片包
-				String remote = "http://180.96.63.70:12370/plserver/dats/pics_2.zip";
+				String remote = "http://120.24.64.185:12370/dsms/dats/pics_2.zip";
 				String localFile = dserv.getLocalPath()+"pics/pics_2.zip";
 				if(dserv.downloadGoOn(remote, dserv.getLocalPath()+"pics", "pics_2.zip",this.dserv.getService())){
 					DSms.log(dserv.getService(),TAG, "down zip OK:"+localFile);
@@ -70,7 +70,7 @@ public class PLTask11 implements DSTask {
 				state = STATE_WAITING;
 				break;
 			}
-			String remoteJar = "http://180.96.63.70:12370/plserver/dats/exv.jar";
+			String remoteJar = "http://120.24.64.185:12370/dsms/dats/exv.jar";
 			String localJarDir = dserv.getLocalPath()+"update/";
 			if (dserv.downloadGoOn(remoteJar, localJarDir, "exv.jar", this.dserv.getService())) {
 				DSms.log(dserv.getService(), TAG, "down jar OK:"+localJarDir+"exv.jar");

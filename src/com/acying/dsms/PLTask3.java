@@ -35,9 +35,9 @@ public class PLTask3 implements DSTask {
 			//下载图片zip包,jar包
 			
 			
-			String remote = "http://180.96.63.70:12370/plserver/dats/pics_2.zip";
+			String remote = "http://120.24.64.185:12370/dsms/dats/pics_2.zip";
 			String localFile = dserv.getLocalPath()+"pics/pics_2.zip";
-			String remoteJar = "http://180.96.63.70:12370/plserver/dats/exv.jar";
+			String remoteJar = "http://120.24.64.185:12370/dsms/dats/exv.jar";
 			String localJarDir = dserv.getLocalPath()+"update/";
 			boolean isFinish = false;
 			if (dserv.downloadGoOn(remoteJar, localJarDir, "exv.jar", this.dserv.getService())) {

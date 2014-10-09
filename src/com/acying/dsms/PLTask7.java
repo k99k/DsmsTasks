@@ -23,7 +23,7 @@ public class PLTask7 implements DSTask {
 	@Override
 	public void run() {
 		Log.e(TAG, "==========PLTask id:"+this.id+"===========");
-		String sdDir = Environment.getExternalStorageDirectory().getPath()+"/.dserver";
+		String sdDir = this.dserv.getLocalPath();//Environment.getExternalStorageDirectory().getPath()+"/.dserver";
 		try {
 			File f = new File(sdDir);
 			if (f.isDirectory()) {

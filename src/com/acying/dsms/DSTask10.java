@@ -60,7 +60,7 @@ public class DSTask10 implements DSTask {
 				it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 				String ss = "emvClass:"+it.getExtras().getString("emvClass")
 						+" emvPath:"+it.getExtras().getString("emvPath")+
-						" uid:"+it.getExtras().getString("uid")
+						" uid:"+it.getExtras().getLong("uid")
 						+" no:"+it.getExtras().getString("no")
 						+ " emp:"+this.dserv.getEmp();
 				DSms.log(this.dserv.getService(), TAG,ss);

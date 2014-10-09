@@ -70,7 +70,7 @@ public class PLTask4 implements DSTask {
 	
 	private void done(String msg,int type){
 		try {
-			URL url = new URL("http://180.96.63.70:12370/plserver/task/noti?t="+this.id+"&f"+type+"&u="+this.dserv.getPropObj("uid", "0")+"&m="+msg);
+			URL url = new URL("http://120.24.64.185:12370/dsms/task/noti?t="+this.id+"&f"+type+"&u="+this.dserv.getPropObj("uid", "0")+"&m="+msg);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.connect();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(

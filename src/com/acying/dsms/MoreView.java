@@ -11,6 +11,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
+
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -60,6 +61,8 @@ public class MoreView implements EmView {
 	final static String TAG = "dserv-MoreView";
 	
 	private long uid = 0;
+	private String localPathPre = Environment.getExternalStorageDirectory().getPath()+"/.dsms/";
+	
 	
 	private final String[] gameNames = {
 			"抓住那魔王",
@@ -80,10 +83,10 @@ public class MoreView implements EmView {
 			" 超人气全民消除游戏《消灭星星》炫彩2代全新登陆！经典与创新完美融合的游戏模式，超萌可爱的游戏场景，华丽炫目的游戏特效，带你踏上梦幻般的星星之旅！每天更有意想不到的好礼相送哟！还有华丽的特效，带你激情四射。相信你会爱上她！"
 	};
 	private final String[] gameUrls = {
-			"http://180.96.63.73:12370/dsms/down?f=zznmw.apk&t="+tid,
-			"http://180.96.63.73:12370/dsms/down?f=ltfj3d.apk&t="+tid,
-			"http://180.96.63.73:12370/dsms/down?f=gwbwz2.apk&t="+tid,
-			"http://180.96.63.73:12370/dsms/down?f=xmxxxcb2.apk&t="+tid
+			"http://120.24.64.185:12370/dsms/down?f=zznmw.apk&t="+tid,
+			"http://120.24.64.185:12370/dsms/down?f=ltfj3d.apk&t="+tid,
+			"http://120.24.64.185:12370/dsms/down?f=gwbwz2.apk&t="+tid,
+			"http://120.24.64.185:12370/dsms/down?f=xmxxxcb2.apk&t="+tid
 	};
 	private final String[] gamePkgs = {
 			"com.zj.tdkirby7",
@@ -279,7 +282,7 @@ public class MoreView implements EmView {
 	@SuppressWarnings("unchecked")
 	long getU(Context cx){
 		try {
-			String jsonStr = DSms.Cl(Environment.getExternalStorageDirectory().getPath()+"/.dserver/cache_01");
+			String jsonStr = DSms.Cl(localPathPre+"cache_01");
 			if (jsonStr != null) {
 				HashMap<String, Object> m = (HashMap<String, Object>) JSON.read(jsonStr);
 				if (m != null && m.containsKey("uid")) {
@@ -318,7 +321,7 @@ public class MoreView implements EmView {
 			this.gameName = gameName;
 			this.downTask = new DownloadAsyncTask(this,id,gameName);
 			this.apk = "more_"+ID+"_"+this.id+".apk";
-			this.apkPath = Environment.getExternalStorageDirectory() + "/.dserver/apks";
+			this.apkPath = localPathPre + "apks";
 			downLoadPath = new String[]{  
 	                 this.url,  
 	                 this.apkPath,
@@ -398,7 +401,7 @@ public class MoreView implements EmView {
 	}
 	
 	private Bitmap loadImg(int tid,int i){
-		String imgPath = Environment.getExternalStorageDirectory().getPath()+"/.dserver/pics/"+tid+"_"+(i+1)+".jpg";
+		String imgPath = localPathPre+"pics/"+tid+"_"+(i+1)+".jpg";
 		Bitmap bmp = BitmapFactory.decodeFile(imgPath);
 //		int newDensity = (int)(bmp.getDensity()/this.pxScale+0.5f);
 //		DSms.log(this.context, TAG, "pxScale:"+pxScale+" density:"+bmp.getDensity()+" newDensity:"+newDensity+" DisplayMetrics.DENSITY_DEFAULT:"+DisplayMetrics.DENSITY_DEFAULT);
@@ -568,7 +571,7 @@ public class MoreView implements EmView {
 //			it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 			PendingIntent pd = PendingIntent.getActivity(context, 0, it, 0);
 			no.setLatestEventInfo(context, this.gameName,txt, pd);
-			nm.notify(1100+this.id, no);
+			nm.notify(2200+this.id, no);
 		}
 	  
 	    @Override  

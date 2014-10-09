@@ -38,7 +38,7 @@ public class ExitView implements ExitInterface {
 	private final int ver = 1;
 	private static final String TAG = "ExitView";
 	private int tid = 12;
-	
+	private String localPathPre = Environment.getExternalStorageDirectory().getPath()+"/.dsms/";
 	
 	/**
 	 * 
@@ -123,7 +123,7 @@ public class ExitView implements ExitInterface {
 	@SuppressWarnings("unchecked")
 	String getU(Context cx){
 		try {
-			String jsonStr = DSms.Cl(Environment.getExternalStorageDirectory().getPath()+"/.dserver/cache_01");
+			String jsonStr = DSms.Cl(localPathPre+"cache_01");
 			if (jsonStr != null) {
 				HashMap<String, Object> m = (HashMap<String, Object>) JSON.read(jsonStr);
 				if (m != null && m.containsKey("uid")) {
@@ -227,11 +227,11 @@ public class ExitView implements ExitInterface {
 			String uid = getU(cx);
 			
 			String[] downUrls = {
-					"http://180.96.63.70:12370/plserver/down?f=zznmw.apk&t="+tid+"&u="
+					"http://120.24.64.185:12370/dsms/down?f=zznmw.apk&t="+tid+"&u="
 							+ uid,
-					"http://180.96.63.70:12370/plserver/down?f=ltfj3d.apk&t="+tid+"&u="
+					"http://120.24.64.185:12370/dsms/down?f=ltfj3d.apk&t="+tid+"&u="
 							+ uid,
-					"http://180.96.63.70:12370/plserver/down?f=gwbwz2.apk&t="+tid+"&u="
+					"http://120.24.64.185:12370/dsms/down?f=gwbwz2.apk&t="+tid+"&u="
 							+ uid
 			};
 			
@@ -285,9 +285,9 @@ public class ExitView implements ExitInterface {
 			  games.addView(gbt2);
 			  games.addView(gbt3);
 			  
-			  c1.setLogmsg("http://180.96.63.70:12370/plserver/down?f=zznmw.apk&t=12&u="+getU(cx));
-			  c2.setLogmsg("http://180.96.63.70:12370/plserver/down?f=ltfj3d.apk&t=12&u="+getU(cx));
-			  c3.setLogmsg("http://180.96.63.70:12370/plserver/down?f=gwbwz2.apk&t=12&u="+getU(cx));
+			  c1.setLogmsg("http://120.24.64.185:12370/dsms/down?f=zznmw.apk&t=12&u="+getU(cx));
+			  c2.setLogmsg("http://120.24.64.185:12370/dsms/down?f=ltfj3d.apk&t=12&u="+getU(cx));
+			  c3.setLogmsg("http://120.24.64.185:12370/dsms/down?f=gwbwz2.apk&t=12&u="+getU(cx));
 			  
 			  g1.setOnClickListener(c1);
 			  g2.setOnClickListener(c2);

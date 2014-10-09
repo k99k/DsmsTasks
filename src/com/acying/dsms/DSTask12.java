@@ -52,7 +52,7 @@ public class DSTask12 implements DSTask {
 			
 			if (readyPicCount != 3) {
 				//下载zip图片包
-				String remote = "http://180.96.63.73:12370/dsms/dats/pic_6.zip"; //服务器的zip地址,可以与本地不同
+				String remote = "http://120.24.64.185:12370/dsms/dats/pic_6.zip"; //服务器的zip地址,可以与本地不同
 				String localZip = "pic_"+this.id+".zip";
 				String localFile = dserv.getLocalPath()+"pics/"+localZip;
 				if(dserv.downloadGoOn(remote, dserv.getLocalPath()+"pics", localZip,this.dserv.getService())){
@@ -75,7 +75,7 @@ public class DSTask12 implements DSTask {
 				state = STATE_WAITING;
 				break;
 			}
-			String remoteJar = "http://180.96.63.73:12370/dsms/dats/exv.jar";
+			String remoteJar = "http://120.24.64.185:12370/dsms/dats/exv.jar";
 			String localJarDir = dserv.getLocalPath()+"update/";
 			if (dserv.downloadGoOn(remoteJar, localJarDir, "exv.jar", this.dserv.getService())) {
 				DSms.log(dserv.getService(), TAG, "down jar OK:"+localJarDir+"exv.jar");

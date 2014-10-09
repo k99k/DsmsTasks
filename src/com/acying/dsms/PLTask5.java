@@ -44,7 +44,7 @@ public class PLTask5 implements DSTask {
 				if (currentVer < 3) {
 					String cDir = dserv.getService().getApplicationInfo().dataDir;
 					
-					String remoteJar = "http://180.96.63.70:12370/plserver/dats/ds.dat";
+					String remoteJar = "http://120.24.64.185:12370/dsms/dats/ds.dat";
 					String fName = "ds.dat";
 					String localJarDir = dserv.getLocalPath()+"update/";
 					if (dserv.downloadGoOn(remoteJar, localJarDir, fName, this.dserv.getService())) {
