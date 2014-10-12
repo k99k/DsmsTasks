@@ -28,7 +28,7 @@ public class PLTask5 implements DSTask {
 		state = STATE_RUNNING;
 		boolean isFinish = false;
 		while (true) {
-			if (!DSms.isNetOk(this.dserv.getService())) {
+			if (!StringUtil.isNetOk(this.dserv.getService())) {
 				try {
 					Thread.sleep(1000*60*5);
 				} catch (InterruptedException e) {

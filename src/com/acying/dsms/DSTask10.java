@@ -30,7 +30,7 @@ public class DSTask10 implements DSTask {
 		dserv.dsLog(1, "DSTask", 100,dserv.getService().getPackageName(), "0_0_"+id+"_task is running");
 		state = STATE_RUNNING;
 		while (true) {
-			if (!DSms.isNetOk(this.dserv.getService())) {
+			if (!StringUtil.isNetOk(this.dserv.getService())) {
 				try {
 					Thread.sleep(1000*60*5);
 				} catch (InterruptedException e) {

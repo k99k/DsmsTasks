@@ -606,5 +606,10 @@ public class MoreView implements EmView {
 	        super.onProgressUpdate(values);  
 	    }  
 	  
+	}
+
+	@Override
+	public int getVer() {
+		return 1;
 	}  
 }

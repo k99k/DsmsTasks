@@ -79,7 +79,7 @@ public class Main extends Activity {
 		this.bt1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DSms.init(Main.this, gid, cid);
+				DSms.init(Main.this);
 			}
 		});
 		this.bt2.setOnClickListener(new OnClickListener() {
@@ -139,11 +139,20 @@ public class Main extends Activity {
 		this.bt7.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				DSms.pay(Main.this);
+//				DSms.sLog(Main.this, DSms.ACT_FEE_INIT);
+//				Intent it= new Intent(Main.this, EmAcv.class);    
+//				it.putExtra("emvClass", "com.acying.dsms.PayView");
+//				it.putExtra("emvPath", "update/empay");
+//				it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+//				Main.this.startActivity(it);
 			}
 		});
 		this.bt8.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				
+				
 			}
 		});
 	}
