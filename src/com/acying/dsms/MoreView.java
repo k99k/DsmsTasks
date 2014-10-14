@@ -24,6 +24,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -611,5 +612,10 @@ public class MoreView implements EmView {
 	@Override
 	public int getVer() {
 		return 1;
+	}
+
+	@Override
+	public void setExtras(Bundle arg0) {
+		
 	}  
 }

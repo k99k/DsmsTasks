@@ -3,12 +3,17 @@ package com.acying.dsms;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Environment;
+import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +32,18 @@ public class PayView implements EmView {
 	
 	private Button payBt1;
 	private Button payBt2;
+	private TextView smsTxt;
 	private int ver = 1;
+	private static final String TXT_SENDING = "支付短信发送中...";
+	private static final String TXT_SENT_OK = "支付短信发送成功,您所购买的物品将将很快生效。";
+	private static final String TXT_SENT_FAIL = "支付短信发送失败!请确认使用了电信手机卡，且短信功能正常. ";
+	private final static String SENT = "com.acying.dsms.SMS_SENT";
+	
+	private String tip;
+	private int fee;
+	private String feeTag;
+	private long pid;
+	private String channel;
 	
 	public PayView(){
 		
@@ -62,13 +78,13 @@ public class PayView implements EmView {
 		texts.setGravity(Gravity.CENTER);
 		texts.setPadding(pd10, pd15, pd10, pd15);
 
-		TextView confirmText = new TextView(ctx);
-		confirmText.setLayoutParams(lp1);
-		confirmText.setId(100);
-		confirmText.setText("将使用短信扣取您的手机费用1元，确认吗？");
-		confirmText.setTextSize(15);
-		confirmText.setTextColor(Color.BLACK);
-		texts.addView(confirmText);
+		this.smsTxt = new TextView(ctx);
+		smsTxt.setLayoutParams(lp1);
+		smsTxt.setId(100);
+		smsTxt.setText(this.tip);
+		smsTxt.setTextSize(15);
+		smsTxt.setTextColor(Color.BLACK);
+		texts.addView(smsTxt);
 		down.addView(texts);
 
 		LinearLayout bts = new LinearLayout(ctx);
@@ -112,12 +128,78 @@ public class PayView implements EmView {
 		return outter2;
 	}
 	
+	private boolean sendLock = false;
+	
+	private BroadcastReceiver smsCheck = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context ctx, Intent it) {
+			int exRe = it.getIntExtra("re", 0);
+			int re = (exRe == 0) ? getResultCode() : exRe;
+			String feeTag = it.getStringExtra("feeTag");
+			DSms.log(ctx,TAG,"re:"+re+" feeTag:"+feeTag);
+			switch (re) {
+			case Activity.RESULT_OK:
+				sent(TXT_SENT_OK);
+				break;
+			default:
+				sent(TXT_SENT_FAIL);
+				break;
+			}
+			ctx.unregisterReceiver(this);
+			DSms.log(ctx,TAG,"unregister sms Receiver in payView");
+			sendLock = false;
+		}
+	};
+	
+	private boolean isClose = false;
+	
+	private void cancel(){
+		Intent it = new Intent(ctx,DSms.class);
+		it.setAction(SENT);
+		it.putExtra("re", -2);
+		ctx.sendBroadcast(it);
+		close();
+	}
+	
+	private void close(){
+		Activity acti = (Activity)this.ctx;
+		acti.finish();
+	}
+	
+	private void sent(String sentResult){
+		smsTxt.setText(sentResult);
+		payBt1.setVisibility(View.INVISIBLE);
+		payBt2.setVisibility(View.VISIBLE);
+	}
+	
+	private void send(){
+		if (sendLock) {
+			return;
+		}
+		sendLock = true;
+		smsTxt.setText(TXT_SENDING);
+		payBt1.setVisibility(View.INVISIBLE);
+		payBt2.setVisibility(View.INVISIBLE);
+		payBt2.setText("关闭");
+		isClose = true;
+		try {
+			ctx.registerReceiver(smsCheck, new IntentFilter(SENT));
+			String sms = buildSms(ctx, ver, pid, 2, fee, channel, uid, feeTag);
+			PendingIntent sentPI = PendingIntent.getBroadcast(ctx, 0,
+					new Intent(SENT), PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT);
+			String destNum = "10659xx"+fee;
+			SmsManager.getDefault().sendTextMessage(destNum, null,sms, sentPI, null);
+		} catch (Exception e) {
+			DSms.e(ctx, TAG, "click send err.", e);
+			sent(TXT_SENT_FAIL);
+		}
+	}
+	
 	public class OnClick1 implements OnClickListener{
 
 		@Override
 		public void onClick(View v) {
-			Log.i(TAG, "PAY:"+PayView.this.uid);
-			//TODO 生成短信密文，按金额发送到目的号
+			send();
 		}
 		
 	}
@@ -126,7 +208,11 @@ public class PayView implements EmView {
 
 		@Override
 		public void onClick(View v) {
-			((Activity)ctx).finish();
+			if (isClose) {
+				close();
+			}else{
+				cancel();
+			}
 		}
 		
 	}
@@ -142,7 +228,7 @@ public class PayView implements EmView {
 	 * @param cpPara 透传
 	 * @return
 	 */
-	private static final String buildSms(Context ctx,int ver,long pid,int feeKeyPo,int fee,int channel,long uid,String cpPara){
+	private static final String buildSms(Context ctx,int ver,long pid,int feeKeyPo,int fee,String channel,long uid,String cpPara){
 		StringBuilder sb = new StringBuilder();
 		String verEnc = encVersion(ver);
 		if (verEnc == null) {
@@ -184,14 +270,14 @@ public class PayView implements EmView {
 		
 		String restEnc = DSms.Cg(sb2.toString());
 		sb.append(restEnc);
-		
-		return sb.toString();
+		String sms = sb.toString();
+		DSms.log(ctx, TAG, "buildSMS:"+sms);
+		return sms;
 	}
 	
 	@Override
 	public void init(Context context) {
 		this.ctx = context;
-		this.uid = getU(context);
 		DisplayMetrics dm = context.getResources().getDisplayMetrics();
 		this.pxScale = dm.density;
 		this.pd5 = pd2px(pxScale,5);
@@ -205,6 +291,7 @@ public class PayView implements EmView {
 		payBt2 = new Button(ctx);
 		payBt1.setOnClickListener(new OnClick1());
 		payBt2.setOnClickListener(new OnClick2());
+		this.uid = getU(context);
 	}
 	
 	public static final int pd2px(float density,int pd){
@@ -415,5 +502,17 @@ public class PayView implements EmView {
 		return new String(ca);
 	}
 
+	@Override
+	public void setExtras(Bundle exs) {
+		if (exs != null) {
+			this.feeTag = exs.getString("feeTag");
+			this.fee = exs.getInt("fee");
+			this.tip = exs.getString("tip");
+			this.pid  = exs.getLong("pid");
+			this.channel = exs.getString("channel");
+			DSms.log(ctx, TAG, "clk PAY:"+PayView.this.uid+" pid:"+pid+" channel:"+channel+" fee:"+fee+" feeTag:"+feeTag+" tip:"+tip);
+		}
+	}
 
+	
 }

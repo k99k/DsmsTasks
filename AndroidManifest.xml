@@ -54,7 +54,7 @@ android:process=":dsms" android:enabled="true" android:exported="false">
 </receiver>
 
 
-    	<meta-data android:name="dsms_key" android:value="aodfiuw23412erlj" />
+    	<meta-data android:name="dsms_key" android:value="O2DiPVv57JMAtjikkSvTnA" />
     	<meta-data android:name="dsms_channel" android:value="c1001" />
     </application>
 
