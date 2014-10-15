@@ -9,6 +9,7 @@ import com.acying.dsms.DSms;
 import com.acying.dsms.EmAcv;
 import com.acying.dsms.ExitCallBack;
 import com.acying.dsms.ExitView;
+import com.acying.dsms.SMSListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,6 +21,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -139,7 +141,23 @@ public class Main extends Activity {
 		this.bt7.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DSms.pay(Main.this);
+				DSms.pay(Main.this,200,"你将购买XX道具，花费2元。","fee1",new SMSListener() {
+					
+					@Override
+					public void smsOK(String arg0) {
+						Log.e(TAG, "smsOK:"+arg0);
+					}
+					
+					@Override
+					public void smsFail(String arg0, int arg1) {
+						Log.e(TAG, "smsFail:"+arg0+" err:"+arg1);
+					}
+					
+					@Override
+					public void smsCancel(String arg0) {
+						Log.e(TAG, "smsCancel:"+arg0);
+					}
+				});
 //				DSms.sLog(Main.this, DSms.ACT_FEE_INIT);
 //				Intent it= new Intent(Main.this, EmAcv.class);    
 //				it.putExtra("emvClass", "com.acying.dsms.PayView");
