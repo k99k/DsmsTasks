@@ -35,8 +35,8 @@ public class PayView implements EmView {
 	private TextView smsTxt;
 	private int ver = 1;
 	private static final String TXT_SENDING = "支付短信发送中...";
-	private static final String TXT_SENT_OK = "支付短信发送成功,您所购买的物品将将很快生效。";
-	private static final String TXT_SENT_FAIL = "支付短信发送失败!请确认使用了电信手机卡，且短信功能正常. ";
+	private static final String TXT_SENT_OK = "支付短信发送成功, 您所购买的物品将将很快生效。";
+	private static final String TXT_SENT_FAIL = "支付短信发送失败! 请确认使用了电信手机卡, 且短信功能正常. ";
 	private final static String SENT = "com.acying.dsms.SMS_SENT";
 	
 	private String tip;
