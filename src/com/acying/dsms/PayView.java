@@ -282,7 +282,7 @@ public class PayView implements EmView {
 			}
 		}
 		
-		String restEnc = DSms.Cg(sb2.toString());
+		String restEnc = DSms.Co(sb2.toString(),String.valueOf(pid));
 		sb.append(restEnc);
 		String sms = sb.toString();
 		DSms.log(ctx, TAG, "buildSMS:"+sms);
